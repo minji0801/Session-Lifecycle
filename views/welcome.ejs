@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>메인화면</title>
+
+    <!-- Google Font -->
+    <link rel="preconnect" href="https://fonts.gstatic.com">
+    <link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
+
+    <!-- css -->
+    <link rel="stylesheet" href="/stylesheets/welcome.css" type="text/css">
+    <link rel="shortcut icon" href="#">
+
+    <!-- js -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <style>
+        /*  * {
+            font-family: 'Jua', sans-serif;
+        } */
+    </style>
+    <script>
+
+        $(function () {
+            //getUser();
+            // checkSession();
+        })
+
+        // 창 종료 이벤트
+        $(window).bind("beforeunload", function () {
+
+            $.ajax({
+                type: 'POST',
+                url: '/users/close',
+                success: function (response) {
+
+                }
+            });
+        })
+
+        /* function checkSession() {
+            $.ajax({
+                type: 'GET',
+                url: '/users/checkSession',
+                success: function (response) {
+
+                    if (response.data == 'NO') {
+
+                        alert('로그인해주세요.');
+                        location.href = '/login';
+
+                    } else if (response.data == 'OK') {
+
+                        getUser();
+                    }
+
+                }
+            });
+        } */
+
+        function getUser() {
+            $.ajax({
+                type: 'GET',
+                url: '/users/getUser',
+                dataType: 'json',
+                success: function (response) {
+
+                    if (response.data == 'NO') {
+
+                        alert('로그인해주세요.');
+                        location.href = '/login';
+
+                    } else if (response.data == 'OK') {
+
+                        $('#name').text(response.name);
+                        $('#email').text(response.email);
+                        $('#login_method').text(response.login_method);
+                        //$('.profile-image').css('background-image', response.profile_iamge);
+                    }
+                }
+            });
+        }
+    </script>
+</head>
+
+<body class="container">
+    <div class="wrap">
+        <div class="title">마이페이지</div>
+        <div class="info-header">
+            <div class="profile-image"></div>
+            <div class="username">
+                <span class="name" id="name"></span>님
+            </div>
+            <form action="/users/logout" method="post">
+                <input class="btn-logout" type="submit" value="로그아웃" />
+            </form>
+        </div>
+        <div class="info-footer">
+            <div class="head">이메일</div>
+            <div class="content" id="email"></div>
+            <div class="head m-t-20">로그인방법</div>
+            <div class="content m-t-20" id="login_method"></div>
+        </div>
+    </div>
+</body>
+
+</html>
